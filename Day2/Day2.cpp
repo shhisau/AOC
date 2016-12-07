@@ -15,8 +15,8 @@ struct Position {
 
 class NumPad {
 private:
-  int numPad [3][3] = {{1, 4, 7}, {2, 5, 8}, {3, 6, 9 } };
-  Position currPosition = {.x=1, .y=1}; // Start at 5
+  char numPad [5][5] = { {0,0,'5',0,0,},{0,'A','6','2',0},{'D','B','7','3','1'},{0,'C','8','4',0,},{0,0,'9',0,0} };
+  Position currPosition = {.x=-0, .y=2}; // Start at 5
 public:
   int getX(){
     return currPosition.x;
@@ -25,12 +25,37 @@ public:
     return currPosition.y;
   };
   void moveX( int moves ){
-    currPosition.x += moves;
+    if( moves > 0 ){
+      // Moving right...
+      if( getNumber() != '1' && getNumber() != '4'  && getNumber() != '9' &&
+          getNumber() != 'C' && getNumber() != 'D' ){
+        currPosition.x += moves;
+      }
+    } else{
+      // Move left
+      if( getNumber() != '1' && getNumber() != '2' && getNumber() != '5' &&
+          getNumber() != 'A' && getNumber() != 'D' ){
+        currPosition.x += moves;
+      }
+    }
+
   }
   void moveY(int moves ){
-    currPosition.y += moves;
+    if ( moves > 0 ){
+      // Move up...
+      if ( getNumber() != '5' && getNumber() != '2' && getNumber() != '1' &&
+           getNumber() != '4' && getNumber() != '9' ){
+        currPosition.y += moves;
+      }
+    } else {
+      // Move down...
+      if ( getNumber() != '5' && getNumber() != 'A' && getNumber() != 'D' &&
+           getNumber() != 'C' && getNumber() != '9' ){
+        currPosition.y += moves;
+      }
+    }
   }
-  int getNumber(){
+  char getNumber(){
     return numPad[currPosition.x][currPosition.y];
   }
 };
@@ -54,26 +79,19 @@ int main() {
     char *currChar = &buffer[0];
     while( *currChar != '\0' ) {
       if (*currChar == 'U') {
-        if(bathroomPad.getY() != 0){
-          bathroomPad.moveY(-1);
-        }
+        bathroomPad.moveY(1);
       } else if (*currChar == 'D') {
-        if(bathroomPad.getY() != 2){
-          bathroomPad.moveY(1);
-        }
+        bathroomPad.moveY(-1);
+
       } else if (*currChar == 'L'){
-        if(bathroomPad.getX() != 0){
-          bathroomPad.moveX(-1);
-        }
+        bathroomPad.moveX(-1);
+
       } else if (*currChar == 'R'){
-        if(bathroomPad.getX() != 2){
-          bathroomPad.moveX(1);
-        }
+        bathroomPad.moveX(1);
       }
       // move current char pointer to next
       currChar++;
     }
-    cout << bathroomPad.getNumber();
+    cout << bathroomPad.getNumber() << endl;
   }
-
 }
